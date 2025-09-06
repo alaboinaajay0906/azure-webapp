@@ -16,28 +16,36 @@ jobs:
       - name: Set up Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '20.x'  
+          node-version: '20.x'
 
       - name: Install dependencies
-        run: npm install
+        run: npm ci
 
       - name: Build Next.js app
         run: npm run build
+
+      # Ensure node_modules are included (Azure needs them at runtime)
+      - name: Archive production build
+        run: |
+          mkdir -p deploy
+          cp -r .next public package.json server.js node_modules deploy/
 
       - name: Upload artifact for deployment job
         uses: actions/upload-artifact@v4
         with:
           name: next-app
-          path: ./
+          path: deploy/
 
   deploy:
     runs-on: ubuntu-latest
     needs: build-and-deploy
+
     steps:
       - name: Download artifact from build job
         uses: actions/download-artifact@v4
         with:
           name: next-app
+          path: .
 
       - name: Deploy to Azure Web App
         uses: azure/webapps-deploy@v3
