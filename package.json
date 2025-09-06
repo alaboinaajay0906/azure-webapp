@@ -1,10 +1,8 @@
 {
   "name": "my-nextjs-app",
   "version": "1.0.0",
-    "scripts": {
-  "start": "next start -H 0.0.0.0 -p $PORT"
-}
-
+  "scripts": {
+    "start": "next start -H 0.0.0.0 -p $PORT" 
   },
   "dependencies": {
     "next": "14.1.0",
