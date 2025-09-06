@@ -28,7 +28,7 @@ jobs:
       - name: Archive production build
         run: |
           mkdir -p deploy
-          cp -r .next public package.json server.js node_modules deploy/
+          cp -r .next package.json server.js node_modules deploy/
 
       - name: Upload artifact for deployment job
         uses: actions/upload-artifact@v4
