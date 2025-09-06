@@ -1,0 +1,47 @@
+name: Deploy Next.js to Azure
+
+on:
+  push:
+    branches: [main]
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Deploy to Azure Web App
+        uses: azure/webapps-deploy@v3
+        with:
+          app-name: 'nextjs-app-us'
+          slot-name: 'Production'
+          package: .
+          publish-profile: ${{ secrets.AZURE_PUBLISH_PROFILE }}
+
+      - name: Wait for app to start
+        run: sleep 15
+
+      - name: Verify deployment health
+        run: |
+          URL="https://nextjs-app-us.azurewebsites.net"
+          echo "Testing application at $URL..."
+          
+          # Try multiple times with timeout
+          for i in {1..3}; do
+            response_code=$(curl -s -o /dev/null -w "%{http_code}" --max-time 10 "$URL" || echo "000")
+            echo "Attempt $i: HTTP $response_code"
+            
+            if [ "$response_code" -eq 200 ] || [ "$response_code" -eq 301 ] || [ "$response_code" -eq 302 ]; then
+              echo "✅ DEPLOYMENT SUCCESSFUL: Application is live and responding"
+              echo "🌐 Live URL: $URL"
+              exit 0
+            fi
+            sleep 5
+          done
+          
+          echo "❌ DEPLOYMENT FAILED: Application not responding after 3 attempts"
+          echo "🔍 Check logs at: https://nextjs-app-us.scm.azurewebsites.net/api/logs"
+          exit 1
