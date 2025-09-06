@@ -31,7 +31,7 @@ jobs:
         run: zip -r build-artifact.zip .next node_modules package.json package-lock.json next.config.js
 
       - name: Upload build artifact
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: nextjs-build
           path: build-artifact.zip
