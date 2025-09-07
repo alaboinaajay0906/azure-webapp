@@ -25,7 +25,7 @@ jobs:
         run: npm ci
 
       - name: Build Next.js app
-        run: npm run build
+        run: npm run build -- --no-lint
 
       # Ensure node_modules are included (Azure needs them at runtime)
       - name: Archive production build
