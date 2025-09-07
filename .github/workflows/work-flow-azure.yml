@@ -25,13 +25,26 @@ jobs:
         run: npm ci
 
       - name: Build Next.js app
-        run: npm run build -- --no-lint
+        run: |
+          NEXT_PUBLIC_BUILD_TIMESTAMP=$(node -e 'console.log(Date.now())') npm run build
 
       # Ensure node_modules are included (Azure needs them at runtime)
       - name: Archive production build
         run: |
           mkdir -p deploy
-          cp -r .next package.json server.js node_modules deploy/
+
+          # Copy the ESSENTIAL pieces for a custom server
+          cp -r .next package.json package-lock.json server.js deploy/
+
+          # Copy the SOURCE CODE your custom server depends on
+          cp -r pages/ deploy/
+          cp -r public/ deploy/ # For static assets
+          cp -r styles/ deploy/ # If you have this folder
+          cp -r components/ deploy/ # If you have this folder
+
+          # Switch to the deploy directory and install only production dependencies
+          cd deploy
+          npm ci --only=production
 
       - name: Upload artifact for deployment job
         uses: actions/upload-artifact@v4

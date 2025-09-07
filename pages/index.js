@@ -25,7 +25,7 @@ export default function Home() {
   return (
     <main style={styles.page}>
       <div style={styles.card}>
-        <h1 style={styles.h1}>🚀 Hello from Next.js on Azure cloud!</h1>
+        <h1 style={styles.h1}>🚀 Hello from Next.js on Azure cloud</h1>
 
         <div style={styles.row}>
           <div style={styles.box}>
@@ -46,6 +46,8 @@ export default function Home() {
           </div>
         </div>
 
+      <div>Build Version: {process.env.NEXT_PUBLIC_BUILD_TIMESTAMP}</div>
+      
         <footer style={styles.footer}>
           <small>
             Deployment: <code>main</code> — App Service: <code>nextjs-app-us</code>
