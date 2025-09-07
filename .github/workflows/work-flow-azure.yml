@@ -33,14 +33,14 @@ jobs:
         run: |
           mkdir -p deploy
 
-          # Copy the ESSENTIAL pieces for a custom server
-          cp -r .next package.json package-lock.json server.js deploy/
+          # Copy EVERYTHING except what's in .gitignore (smart approach)
+          rsync -a --exclude-from=.gitignore . deploy/
 
-          # Copy the SOURCE CODE your custom server depends on
-          cp -r pages/ deploy/
-          cp -r public/ deploy/ # For static assets
-          cp -r styles/ deploy/ # If you have this folder
-          cp -r components/ deploy/ # If you have this folder
+          # Remove files/folders we never want in deployment
+          rm -rf deploy/.git deploy/.github
+
+          # The .next folder was excluded by .gitignore, so we need to add it back
+          cp -r .next/ deploy/
 
           # Switch to the deploy directory and install only production dependencies
           cd deploy
