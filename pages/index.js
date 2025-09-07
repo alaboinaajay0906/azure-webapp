@@ -25,10 +25,7 @@ export default function Home() {
   return (
     <main style={styles.page}>
       <div style={styles.card}>
-        <h1 style={styles.h1}>🚀 Hello from Next.js on Azure .. New commmit</h1>
-        <p style={styles.lead}>
-          This is your updated homepage. If you see this, your latest commit has been deployed.
-        </p>
+        <h1 style={styles.h1}>🚀 Hello from Next.js on Azure cloud</h1>
 
         <div style={styles.row}>
           <div style={styles.box}>
